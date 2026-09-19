@@ -1,0 +1,7 @@
+
+/* Centered slideshow with breathing room on large screens. */
+.hero{width:min(calc(100% - 48px),960px,calc(55vh * 16 / 9));height:auto;min-height:0;max-height:none;aspect-ratio:16/9;padding-bottom:44px;margin:18px auto 32px;background:#fff}
+.hero-slide{height:calc(100% - 44px);object-fit:contain;background:#fff}
+.hero-arrow{top:calc((100% - 44px)/2)}
+.hero-controls{bottom:5px}
+@media(max-width:700px){.hero{width:calc(100% - 24px);max-width:480px;height:auto;min-height:0;aspect-ratio:16/9;padding-bottom:40px;margin:10px auto 22px}.hero-slide{height:calc(100% - 40px)}.hero-arrow{top:calc((100% - 40px)/2)}.hero-controls{bottom:4px}}
