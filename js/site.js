@@ -71,6 +71,50 @@
     start();
   }
 
+  const homeSlider = document.querySelector('[data-home-slider]');
+  const homeSlides = homeSlider ? [...homeSlider.querySelectorAll('.home-slide')] : [];
+  if (homeSlides.length) {
+    let current = Math.max(0, homeSlides.findIndex((slide) => slide.classList.contains('active')));
+    let timer;
+    let paused = false;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const renderHomeSlide = () => {
+      homeSlides.forEach((slide, index) => {
+        const active = index === current;
+        slide.classList.toggle('active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+    };
+    const stopHomeSlider = () => clearInterval(timer);
+    const startHomeSlider = () => {
+      stopHomeSlider();
+      if (homeSlides.length < 2 || reducedMotion || paused || document.hidden) return;
+      timer = setInterval(() => {
+        current = (current + 1) % homeSlides.length;
+        renderHomeSlide();
+      }, 7000);
+    };
+    homeSlider.addEventListener('mouseenter', () => {
+      paused = true;
+      stopHomeSlider();
+    });
+    homeSlider.addEventListener('mouseleave', () => {
+      paused = false;
+      startHomeSlider();
+    });
+    homeSlider.addEventListener('focusin', () => {
+      paused = true;
+      stopHomeSlider();
+    });
+    homeSlider.addEventListener('focusout', () => {
+      paused = false;
+      startHomeSlider();
+    });
+    document.addEventListener('visibilitychange', startHomeSlider);
+    renderHomeSlide();
+    startHomeSlider();
+  }
+
   const galleryTabs = [...document.querySelectorAll('[data-gallery-target]')];
   const galleryPanels = [...document.querySelectorAll('.gallery-panel')];
   const showGallery = (target, updateHash = true) => {
@@ -166,4 +210,3 @@
     event.hidden = Boolean((start && today < start) || (end && today > end));
   }
 })();
-
